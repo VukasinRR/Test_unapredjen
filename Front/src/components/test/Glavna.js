@@ -181,7 +181,7 @@ const Glavna = () => {
           Add
         </Button> */}
           <Button onClick={() => doAdd()}>
-            Add
+            Dodaj
           </Button>
         </Form> : null}
 
