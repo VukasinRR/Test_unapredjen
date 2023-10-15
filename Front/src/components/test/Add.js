@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Row, Col, Form, Button } from "react-bootstrap";
+import { Row, Col, Form, Button, Table } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 import SprintsAxios from '../../apis/SprintsAxios';
 import { withNavigation } from '../../routeconf';
@@ -15,27 +15,42 @@ function Add(props) {
 
     }
     const [izvodjac, setIzvodjac] = useState(empty_izvodjac)
-   
+    const [izvodjaci, setIzvodjaci] = useState([])
+
 
     const navigate = useNavigate()
 
     useEffect(() => {
-        getIzvodjaci();
-    }, [])
+        getData();
+      }, [])
 
- 
+    const getData = () => {
+        getIzvojaci();
+      }
 
-    const getIzvodjaci = useCallback(() => {
-        SprintsAxios.get("/izvodjac")
-        .then(res => {
-            console.log(res.data)
-            setIzvodjac(res.data)
+
+
+      
+    const getIzvojaci = () => {
+        SprintsAxios.get("/izvodjac").then((result) => {
+          setIzvodjaci(result.data)
+        }).catch(() => {
+          alert("Nije uspelo dobavljanje.");
         })
-        .catch(error => {
-            console.log(error)
-            alert('Error while fetching sprint')
-        })
-    }, [])
+      }
+    // const getIzvodjaci = useCallback(() => {
+    //     SprintsAxios.get("/izvodjac")
+    //     .then(res => {
+    //         console.log(res.data)
+    //         setIzvodjac(res.data)
+    //         setIzvodjaci(res.data)
+
+    //     })
+    //     .catch(error => {
+    //         console.log(error)
+    //         alert('Error while fetching sprint')
+    //     })
+    // }, [])
 
 
 
@@ -102,6 +117,26 @@ function Add(props) {
                 </Col>
                 <Col></Col>
             </Row>
+
+            <Table bordered striped style={{ marginTop: 5 }}>
+        <thead className="thead-dark">
+          <tr>
+            <th>Izvodjaci</th> 
+          </tr>
+        </thead>
+        <tbody>
+          {izvodjaci.map((nastup) => {
+            return (
+              <tr key={nastup.id}>
+                <td>{nastup.ime}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </Table>
+
+
+
         </>
     )
 }
